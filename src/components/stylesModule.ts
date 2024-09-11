@@ -3,31 +3,34 @@ import styled from "styled-components";
 export const MainWrapper = styled.div`
   height: 100vh;
   background: linear-gradient(to right, #c7c7eb, #ccf2dd);
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Centers content vertically and horizontally */
+
   .container {
     background-color: #ffffff7d;
     border-radius: 12px;
     padding: 1rem;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     box-shadow: 0 10px 15px rgb(0 0 0 / 20%);
     box-sizing: border-box;
     color: rgba(0, 0, 0, 0.8);
     background-blend-mode: overlay;
+    display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    flex-direction: column;
-    position: absolute;
-    width: 80%;
+    width: 80%; /* Set a default width */
+    max-width: 500px; /* Set a maximum width */
+
+    /* Make it responsive */
     @media (max-width: 768px) {
       width: 90%;
       padding: 1rem;
     }
 
     @media (max-width: 480px) {
-      width: 95%; /* Full width on very small screens */
-      padding: 0.5rem; /* Further reduce padding */
+      width: 95%;
+      padding: 0.5rem;
     }
   }
 
@@ -41,23 +44,25 @@ export const MainWrapper = styled.div`
 
   .searchArea > input {
     outline: none;
-    border: none;
     border: 1px solid grey;
     padding: 8px;
     border-radius: 20px;
     text-align: center;
-    width: 80%;
+    width: 80%; /* Adjusts width based on container */
+    max-width: 300px; /* Prevents the input from getting too wide */
     background: transparent;
   }
+
   .searchCircle {
     border: 1px solid grey;
-    width: 30px; /* Adjust the width of the circle as needed */
-    height: 30px; /* Ensure the height matches the width for a perfect circle */
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    margin-left: 10px;
 
     > .searchIcon {
       font-size: 20px;
@@ -73,13 +78,10 @@ export const MainWrapper = styled.div`
 
     > .icon {
       font-size: 9rem;
-
-      /* DO LATER NOT WHEN CREATING UI */
     }
 
     > h1 {
       font-size: 3rem;
-
       font-family: "Bebas Neue", sans-serif;
     }
 
@@ -108,7 +110,9 @@ export const MainWrapper = styled.div`
     );
     border-radius: 12px;
     padding: 10px;
+    width: 100%; /* Ensures full width in container */
   }
+
   .humidityLevel,
   .wind {
     display: flex;
@@ -136,7 +140,6 @@ export const MainWrapper = styled.div`
 
     .loadingIcon {
       font-size: 3rem;
-      /* DO LATER NOT WHEN CREATING UI */
       animation: spin 2s linear infinite;
     }
     p {
@@ -146,7 +149,6 @@ export const MainWrapper = styled.div`
     }
   }
 
-  /* DO LATER NOT WHEN CREATING UI */
   @keyframes spin {
     from {
       transform: rotate(0deg);
