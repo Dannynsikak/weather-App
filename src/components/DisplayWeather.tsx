@@ -36,7 +36,7 @@ const DisplayWeather = () => {
 
   const fetchWeatherData = async (city: string) => {
     try {
-      const url = `${api_Endpoint}weather?q=${city},NG&appid=${api_key}&units=metric`;
+      const url = `${api_Endpoint}weather?q=${city}&appid=${api_key}&units=metric`;
       const searchResponse = await axios.get(url);
 
       const currentSearchResults: WeatherDataTypes = searchResponse.data;
