@@ -19,6 +19,16 @@ export const MainWrapper = styled.div`
     align-items: center;
     flex-direction: column;
     position: absolute;
+    width: 80%;
+    @media (max-width: 768px) {
+      width: 90%;
+      padding: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      width: 95%; /* Full width on very small screens */
+      padding: 0.5rem; /* Further reduce padding */
+    }
   }
 
   .searchArea {
