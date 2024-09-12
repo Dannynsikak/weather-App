@@ -28,11 +28,15 @@ const DisplayWeather = () => {
   const [searchCity, setSearchCity] = React.useState("");
   const [error, setError] = useState<string | null>(null);
 
+  // fetch current weather based on users geolocation
+
   const fetchCurrentWeather = async (lat: number, lon: number) => {
     const url = `${api_Endpoint}weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
     const response = await axios.get(url);
     return response.data;
   };
+
+  // Fetch weather data based on city
 
   const fetchWeatherData = async (city: string) => {
     try {
@@ -42,10 +46,11 @@ const DisplayWeather = () => {
       const currentSearchResults: WeatherDataTypes = searchResponse.data;
       return { currentSearchResults };
     } catch (error) {
-      console.error("No data found for current location");
-      throw error;
+      throw new Error("No data found for this location");
     }
   };
+
+  // handle manual city search
 
   const handleSearch = async () => {
     if (searchCity.trim() === "") {
@@ -59,7 +64,6 @@ const DisplayWeather = () => {
       setError(null); // clear error if the data is found
     } catch (error) {
       setError("No data found for this location.");
-      console.error("No Results Found");
     }
   };
 
@@ -100,16 +104,40 @@ const DisplayWeather = () => {
     );
   };
 
-  React.useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude, longitude } = position.coords;
-      Promise.all([fetchCurrentWeather(latitude, longitude)]).then(
-        ([currentWeather]) => {
-          setWeatherData(currentWeather);
-          setIsLoading(true);
+  // Request geolocation access and handle permission/error
+  const requestLocationAccess = () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          fetchCurrentWeather(latitude, longitude).then((currentWeather) => {
+            setWeatherData(currentWeather);
+            setIsLoading(true);
+          });
+        },
+        (error) => {
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              setError("Permission denied. Please enable location services.");
+              break;
+            case error.POSITION_UNAVAILABLE:
+              setError("Location unavailable.");
+              break;
+            case error.TIMEOUT:
+              setError("Location request timed out.");
+              break;
+            default:
+              setError("An unknown error occurred.");
+          }
         }
       );
-    });
+    } else {
+      setError("Geolocation is not supported by your browser.");
+    }
+  };
+
+  React.useEffect(() => {
+    requestLocationAccess();
   }, []); // added an empty array to prevent infinite re-rendering
   return (
     <MainWrapper>
