@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { MainWrapper } from "./stylesModule";
 import { IoIosSearch } from "react-icons/io";
 import { WiHumidity } from "react-icons/wi";
@@ -105,7 +105,7 @@ const DisplayWeather = () => {
   };
 
   // Request geolocation access and handle permission/error
-  const requestLocationAccess = () => {
+  const requestLocationAccess = useCallback(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -134,11 +134,18 @@ const DisplayWeather = () => {
     } else {
       setError("Geolocation is not supported by your browser.");
     }
+  }, []);
+
+  // handle key press for ENter key
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch(); // Trigger search when Enter key is pressed
+    }
   };
 
   React.useEffect(() => {
     requestLocationAccess();
-  }, []); // added an empty array to prevent infinite re-rendering
+  }, [requestLocationAccess]); // added an empty array to prevent infinite re-rendering
   return (
     <MainWrapper>
       <div className="container">
@@ -148,6 +155,7 @@ const DisplayWeather = () => {
             value={searchCity}
             onChange={(e) => setSearchCity(e.target.value)}
             placeholder="enter a city"
+            onKeyDown={handleKeyPress} // Event listener for Enter Key press
           />
 
           <div className="searchCircle">
